@@ -3,7 +3,6 @@
  * Try to not make your own edits to this file, use the constants folder instead.
  * If more constants should be added file an issue or create PR.
  */
-import 'ts-helpers';
 
 import {
   DEV_PORT, PROD_PORT, UNIVERSAL_PORT, EXCLUDE_SOURCE_MAPS, HOST,
@@ -83,16 +82,16 @@ const DLL_VENDORS = [
   '@angular/platform-browser-dynamic',
   '@angular/platform-server',
   '@angular/router',
-  '@ngrx/core',
-  '@ngrx/core/add/operator/select.js',
-  '@ngrx/effects',
-  '@ngrx/router-store',
-  '@ngrx/store',
-  '@ngrx/store-devtools',
-  '@ngrx/store-log-monitor',
   '@ng-bootstrap/ng-bootstrap',
-  'ngrx-store-freeze',
-  'ngrx-store-logger',
+  // '@ngrx/core',
+  // '@ngrx/core/add/operator/select.js',
+  // '@ngrx/effects',
+  // '@ngrx/router-store',
+  // '@ngrx/store',
+  // '@ngrx/store-devtools',
+  // '@ngrx/store-log-monitor',
+  // 'ngrx-store-freeze',
+  // 'ngrx-store-logger',
   'rxjs',
   ...MY_VENDOR_DLLS
 ];
@@ -220,7 +219,7 @@ const clientConfig = function webpackConfig(): WebpackConfig {
       polyfill: [
         'sockjs-client',
         '@angularclass/hmr',
-        'ts-helpers',
+        'tslib',
         'zone.js',
         'core-js/client/shim.js',
         'core-js/es6/reflect.js',

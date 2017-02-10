@@ -1,7 +1,5 @@
-import { DashboardComponent } from './features/dashboard.component';
-import { NotFound404Component } from './not-found404.component';
+import { NotFoundComponent } from './components/not-found/not-found.component';
 
 export const APP_DECLARATIONS = [
-  DashboardComponent,
-  NotFound404Component
+  NotFoundComponent
 ];
