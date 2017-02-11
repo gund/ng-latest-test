@@ -5,7 +5,7 @@
  */
 
 import {
-  DEV_PORT, PROD_PORT, UNIVERSAL_PORT, EXCLUDE_SOURCE_MAPS, HOST,
+  DEV_PORT, PROD_PORT, EXCLUDE_SOURCE_MAPS, HOST,
   USE_DEV_SERVER_PROXY, DEV_SERVER_PROXY_CONFIG, DEV_SERVER_WATCH_OPTIONS,
   DEV_SOURCE_MAPS, PROD_SOURCE_MAPS, STORE_DEV_TOOLS,
   MY_COPY_FOLDERS, MY_POLYFILL_DLLS, MY_VENDOR_DLLS, MY_CLIENT_PLUGINS, MY_CLIENT_PRODUCTION_PLUGINS,
@@ -40,17 +40,12 @@ const E2E = EVENT.includes('e2e');
 const HMR = hasProcessFlag('hot');
 const PROD = EVENT.includes('prod');
 const WATCH = hasProcessFlag('watch');
-const UNIVERSAL = EVENT.includes('universal');
 
 let port: number;
-if (!UNIVERSAL) {
-  if (PROD) {
-    port = PROD_PORT;
-  } else {
-    port = DEV_PORT;
-  }
+if (PROD) {
+  port = PROD_PORT;
 } else {
-  port = UNIVERSAL_PORT;
+  port = DEV_PORT;
 }
 
 const PORT = port;
@@ -68,8 +63,7 @@ const CONSTANTS = {
   HMR: HMR,
   HOST: JSON.stringify(HOST),
   PORT: PORT,
-  STORE_DEV_TOOLS: JSON.stringify(STORE_DEV_TOOLS),
-  UNIVERSAL: UNIVERSAL
+  STORE_DEV_TOOLS: JSON.stringify(STORE_DEV_TOOLS)
 };
 
 const DLL_VENDORS = [
@@ -98,13 +92,12 @@ const DLL_VENDORS = [
 
 const COPY_FOLDERS = [
   { from: 'src/assets', to: 'assets' },
-  { from: 'src/app/main.css' },
-  { from: 'src/app/styles.css' },
+  { from: 'src/demo/styles.css' },
   ...MY_COPY_FOLDERS
 ];
 
 if (!DEV_SERVER) {
-  COPY_FOLDERS.unshift({ from: 'src/index.html' });
+  COPY_FOLDERS.unshift({ from: 'src/demo/index.html' });
 } else {
   COPY_FOLDERS.push({ from: 'dll' });
 }
@@ -130,7 +123,7 @@ const commonConfig = function webpackConfig(): WebpackConfig {
         exclude: [/\.(spec|e2e|d)\.ts$/]
       },
       { test: /\.json$/, loader: 'json-loader' },
-      { test: /\.html/, loader: 'raw-loader', exclude: [root('src/index.html')] },
+      { test: /\.html/, loader: 'raw-loader', exclude: [root('src/demo/index.html')] },
       { test: /\.css$/, loader: 'raw-loader' },
       ...MY_CLIENT_RULES
     ]
@@ -159,7 +152,7 @@ const commonConfig = function webpackConfig(): WebpackConfig {
         manifest: require(`./dll/vendor-manifest.json`)
       }),
       new HtmlWebpackPlugin({
-        template: 'src/index.html',
+        template: 'src/demo/index.html',
         inject: false
       })
     );
@@ -195,15 +188,15 @@ const commonConfig = function webpackConfig(): WebpackConfig {
       }),
       ...MY_CLIENT_PRODUCTION_PLUGINS,
     );
-    if (!E2E && !WATCH && !UNIVERSAL) {
+    if (!E2E && !WATCH) {
       config.plugins.push(
-        new BundleAnalyzerPlugin({analyzerPort: 5000})
+        new BundleAnalyzerPlugin({ analyzerPort: 5000 })
       );
     }
   }
 
   return config;
-} ();
+}();
 
 // type definition for WebpackConfig at the bottom
 const clientConfig = function webpackConfig(): WebpackConfig {
@@ -215,7 +208,7 @@ const clientConfig = function webpackConfig(): WebpackConfig {
 
   if (DLL) {
     config.entry = {
-      app_assets: ['./src/main.browser'],
+      app_assets: ['./src/demo/main'],
       polyfill: [
         'sockjs-client',
         '@angularclass/hmr',
@@ -237,33 +230,21 @@ const clientConfig = function webpackConfig(): WebpackConfig {
       vendor: [...DLL_VENDORS]
     };
   } else {
-    if (!UNIVERSAL) {
-      if (AOT) {
-        config.entry = {
-          main: './src/main.browser.aot'
-        };
-      } else {
-        config.entry = {
-          main: './src/main.browser'
-        };
-      }
+    if (AOT) {
+      config.entry = {
+        main: './src/demo/main.aot'
+      };
     } else {
-      if (AOT) {
-        config.entry = {
-          main: './src/main.browser.universal.aot'
-        };
-      } else {
-        config.entry = {
-          main: './src/main.browser.universal'
-        };
-      }
+      config.entry = {
+        main: './src/demo/main'
+      };
     }
   }
 
   if (!DLL) {
     config.output = {
-      path: root('dist/client'),
-      filename: 'index.js'
+      path: root('dist/demo'),
+      filename: 'demo.js'
     };
   } else {
     config.output = {
@@ -308,34 +289,7 @@ const clientConfig = function webpackConfig(): WebpackConfig {
 
   return config;
 
-} ();
-
-const serverConfig: WebpackConfig = {
-  target: 'node',
-  entry: './src/server',
-  output: {
-    filename: 'index.js',
-    path: root('dist/server'),
-    libraryTarget: 'commonjs2'
-  },
-  module: {
-    rules: [
-      { test: /ng-bootstrap/, loader: 'imports-loader?window=>global' },
-      ...MY_SERVER_RULES
-    ],
-  },
-  externals: includeClientPackages([
-    // include these client packages so we can transform their source with webpack loaders
-    ...MY_SERVER_INCLUDE_CLIENT_PACKAGES
-  ]),
-  node: {
-    global: true,
-    __dirname: true,
-    __filename: true,
-    process: true,
-    Buffer: true
-  }
-};
+}();
 
 const defaultConfig = {
   resolve: {
@@ -343,13 +297,5 @@ const defaultConfig = {
   }
 };
 
-if (!UNIVERSAL) {
-  DLL ? console.log('BUILDING DLLs') : console.log('BUILDING APP');
-  module.exports = webpackMerge({}, defaultConfig, commonConfig, clientConfig);
-} else {
-  console.log('BUILDING UNIVERSAL');
-  module.exports = [
-    webpackMerge({}, defaultConfig, commonConfig, clientConfig),
-    webpackMerge({}, defaultConfig, commonConfig, serverConfig)
-  ];
-}
+DLL ? console.log('BUILDING DLLs') : console.log('BUILDING APP');
+module.exports = webpackMerge({}, defaultConfig, commonConfig, clientConfig);

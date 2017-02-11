@@ -1,17 +1,18 @@
-import './polyfills.browser.aot';
-import './rxjs.imports';
+import './polyfills';
 declare var ENV: string;
 
 import { enableProdMode } from '@angular/core';
 import { platformBrowser } from '@angular/platform-browser';
-import { AppModuleNgFactory } from '../compiled/src/app/app.module.ngfactory';
+import { bootloader } from '@angularclass/hmr';
+import { DemoModuleNgFactory } from '../../compiled/src/demo/demo.module.ngfactory';
+import { decorateModuleRef } from './environment';
 
 if ('production' === ENV) {
   enableProdMode();
 }
 
 export function main() {
-  return platformBrowser().bootstrapModuleFactory(AppModuleNgFactory)
+  return platformBrowser().bootstrapModuleFactory(DemoModuleNgFactory)
     .catch(err => console.log(err));
 }
 

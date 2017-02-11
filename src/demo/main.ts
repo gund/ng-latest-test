@@ -1,10 +1,9 @@
-import './polyfills.browser';
-import './rxjs.imports';
+import './polyfills';
 
 import { enableProdMode } from '@angular/core';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { bootloader } from '@angularclass/hmr';
-import { AppModule } from './app/app.module';
+import { DemoModule } from './demo.module';
 import { decorateModuleRef } from './environment';
 
 if ('production' === ENV) {
@@ -13,7 +12,7 @@ if ('production' === ENV) {
 
 export function main(): Promise<any> {
   return platformBrowserDynamic()
-    .bootstrapModule(AppModule)
+    .bootstrapModule(DemoModule)
     .then(decorateModuleRef)
     .catch(err => console.error(err));
 }
