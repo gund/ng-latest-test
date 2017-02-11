@@ -14,6 +14,7 @@ export default {
     '@angular/http': 'ng.http',
     '@angular/platform-browser': 'ng.platformBrowser',
     '@ng-bootstrap/ng-bootstrap': 'ngBootstrap',
+    'rxjs/Subject': 'Rx',
     'rxjs/Observable': 'Rx',
     'rxjs/add/observable/of': 'Rx.Observable',
     'rxjs/add/observable/empty': 'Rx.Observable',
