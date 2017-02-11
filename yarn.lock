@@ -4509,6 +4509,10 @@ ripemd160@^1.0.0:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/ripemd160/-/ripemd160-1.0.1.tgz#93a4bbd4942bc574b69a8fa57c71de10ecca7d6e"
 
+rollup-globals-regex@^0.0.1:
+  version "0.0.1"
+  resolved "https://registry.yarnpkg.com/rollup-globals-regex/-/rollup-globals-regex-0.0.1.tgz#b7a7f5fee2275545b72e81b432c9470d857d3343"
+
 rollup-plugin-node-resolve@^2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/rollup-plugin-node-resolve/-/rollup-plugin-node-resolve-2.0.0.tgz#07e0ae94ac002a3ea36e8f33ca121d9f836b1309"

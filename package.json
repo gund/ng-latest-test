@@ -158,6 +158,7 @@
     "raw-loader": "^0.5.1",
     "rimraf": "^2.5.4",
     "rollup": "^0.41.4",
+    "rollup-globals-regex": "^0.0.1",
     "rollup-plugin-node-resolve": "^2.0.0",
     "source-map-loader": "^0.1.6",
     "string-replace-loader": "^1.0.5",
