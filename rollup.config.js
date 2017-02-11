@@ -4,11 +4,15 @@ function fromKebabToCamelCase(str) {
   return str.replace(/\-(.{1})/g, (_, w) => w.toUpperCase());
 }
 
-const ngTester = /^\@angular\/(.+)/;
-ngTester.transform = fromKebabToCamelCase;
+function transformer(regex, ...transformers) {
+  if (transformers && transformers.length > 0) {
+    regex.transform = val => transformers.reduce((v, fn) => fn(v), val);
+  }
+  return regex;
+}
 
 const globalConf = {
-  'ng.$1': ngTester,
+  'ng.$1': transformer(/^\@angular\/(.+)/, fromKebabToCamelCase),
   'ngBootstrap': '@ng-bootstrap\/ng-bootstrap',
   'tslib': 'tslib',
   'Rx': /^rxjs\/[^/]+$/,
@@ -40,7 +44,7 @@ export default {
           if (matches) {
             global = matches.reduce((p, match, i) => {
               if (typeof globMatcher.transform === 'function') {
-                match = globMatcher.transform(match);
+                match = globMatcher.transform(match, i);
               }
               return p.replace(`$${i}`, match);
             }, pattern);
