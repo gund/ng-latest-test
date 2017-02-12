@@ -18,7 +18,8 @@
     ]
   },
   "files": [
-    "src/index.ts"
+    "src/index.ts",
+    "src/custom-typings.d.ts"
   ],
   "awesomeTypescriptLoaderOptions": {
     "useWebpackText": true,
