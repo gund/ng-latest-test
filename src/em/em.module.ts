@@ -1,8 +1,9 @@
+import { CoreConfig, CoreModule } from './core/core.module';
 import { EM_DECLARATIONS } from './em.declarations';
 import { EM_ENTRY_COMPONENTS } from './em.entry-components';
 import { EM_IMPORTS } from './em.imports';
 import { EM_PROVIDERS } from './em.providers';
-import { ApplicationRef, NgModule } from '@angular/core';
+import { ModuleWithProviders, NgModule } from '@angular/core';
 import { HttpModule } from '@angular/http';
 import { BrowserModule } from '@angular/platform-browser';
 
@@ -19,4 +20,14 @@ import { BrowserModule } from '@angular/platform-browser';
   providers: [EM_PROVIDERS]
 })
 
-export class EmModule { }
+export class EmModule {
+
+  static forRoot(config: CoreConfig = {}): ModuleWithProviders {
+    CoreModule.configure(config);
+
+    return {
+      ngModule: EmModule
+    };
+  }
+
+}
