@@ -21,7 +21,7 @@
     "compiled",
     "e2e/**/*.ts",
     "src/**/*.spec.ts",
-    "main.aot.ts"
+    "src/demo/main.aot.ts"
   ],
   "awesomeTypescriptLoaderOptions": {
     "useWebpackText": true,

@@ -20,7 +20,7 @@
     "node_modules",
     "compiled",
     "e2e/**/*.ts",
-    "main.aot.ts"
+    "src/demo/main.aot.ts"
   ],
   "awesomeTypescriptLoaderOptions": {
     "useWebpackText": true,
